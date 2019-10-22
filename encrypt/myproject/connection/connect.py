@@ -48,3 +48,4 @@ def settings():
 
 # -- how i am going to store user settings
 # IDEA: make an mysqlite local to store it
+# -- local setting will help identofy the user don't add it

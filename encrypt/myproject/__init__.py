@@ -9,6 +9,7 @@ from pyfladesk import init_gui
 
 app = Flask(__name__)
 
+login_manager.login_view = "users.login"
 
 from myproject.login.users import users
 

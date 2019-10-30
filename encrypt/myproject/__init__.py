@@ -15,5 +15,5 @@ from myproject.login.users import users
 
 app.register_blueprint(users)
 
-if __name__ == '__main__':
-    init_gui(app)
+# if __name__ == '__main__':
+#     init_gui(app)

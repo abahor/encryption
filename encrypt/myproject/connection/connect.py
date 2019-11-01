@@ -20,9 +20,11 @@ def connect():
 
 
 @connect.route('/got_connected')
+@login_required
 def got_connected():
-
-    return render_template('chat_tab.html')
+    peer_id = request.args.get('peerid')
+    token = request.args.get('token')
+    return render_template('chat_tab.html', peer_id=peer_id, token=token)
 
 
 @connect.route('/call')

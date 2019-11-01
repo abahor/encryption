@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>connect</title>
     <link rel="stylesheet" href="/home/codexz/github/encryption/encrypt/myproject/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
     <style media="screen">
       .form-control{
           width : 50%;
@@ -21,6 +22,7 @@
 This is id doesn't exist or not live right now
 </div>
     <div class="jumbotron">
+      {% block content %}
       <h5>Enter ID:</h5>
       <input id="contactid" type="text" name="" value="" class="form-control" aria-label="try to see if this user is availaibe">
       <button id="putid" type="button" class="btn btn-primary" name="button" aria-label="try to see if this user is availaibe">connect</button>
@@ -29,8 +31,13 @@ This is id doesn't exist or not live right now
       <button id="getmyid" type="button" class="btn btn-primary" name="button" aria-label="try to see if this user is availaibe">get my Id</button>
     </div>
     <input value="{{ token }}" hidden>
+
+<!--    window.open('http://127.0.0.1:5000') -->
+
+
     <script src="/static/js/main.js" charset="utf-8"></script>
-  <script src="/static/js/checking.js">
-  </script>
+    {% endblock %}
+<!--  <script src="/static/js/checking.js">-->
+<!--  </script>-->
   </body>
 </html>

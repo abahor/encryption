@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+{% extend main.html %}
+{% block content%}
 <header >
     <h4>{{ name of the contact}}</h4>
 
 </header>
-<div >
+<div>
     <div>main chat</div>
     <table class="sender">
         <tr>message 1</tr>
@@ -21,5 +15,5 @@
         <tr>message 2</tr>
     </table>
 </div>
-</body>
-</html>
+<script src="/static/js/chat_tab.js"></script>
+{% endblock %}

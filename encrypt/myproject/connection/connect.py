@@ -7,7 +7,7 @@ from Crypto.PublicKey import RSA
 connect = Blueprint('connect', __name__, template_folder='temp')
 
 lis = {'id': 0, 'token': 0}
-
+req = requests.Session()
 
 # -- i will need to define a request.Session for the hole routes
 
@@ -76,7 +76,7 @@ def logout():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        req = requests.Session()
+        # req = requests.Session()
         paramed = {'c': form.email.data}
         username = req.post('https://www.secure.com/username', params=paramed)
         if username.status_code == 200:

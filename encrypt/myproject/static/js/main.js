@@ -1,6 +1,6 @@
 var myid = document.getElementById('getmyid')
 var connectid = document.getElementById('putid')
-var token = document.getElementById('token')
+var token = document.getElementById('token').value
 myid.addEventListener('click',myidclicked())
 
 
@@ -8,7 +8,7 @@ myid.addEventListener('click',myidclicked())
 function myidclicked() {
     var d = new XMLHttpRequest()
     var myid = document.getElementById('getmyid')
-    d.open('POST','https://server.com/myid?token='+token)
+    d.open('POST','http://server.com/myid?token='+token)
     d.onreadystatechange = function(){ if (this.readyState == 4 && this.status == 200) {
        // Typical action to be performed when the document is ready:
 
@@ -42,3 +42,22 @@ function contactid() {
  }
 
 }
+
+
+$(document).ready(function(){
+  socket = io('http://127.0.0.1:5000/mainsocket')
+// var id = 0        ←←← ←   ←               ←
+  socket.on('receive',function (msg) {
+    var id = msg['hisid']
+    // id = msg['hisid']  uncomment this if it's not working    ←          ←←←←←
+    $('#connection_id').html('this id: '+ id  ' is trying to contact you' )
+    $('.modal').modal('show');
+    $('#open_connection').on('click',function () { /// put this outside the scope of the recevidefunction if it not working
+      window.open('http://127.0.0.1:5000/got_connected?peerid='+ msg['hisid'] + '&token=' + token) /// with this
+    })
+
+  })
+
+
+
+})

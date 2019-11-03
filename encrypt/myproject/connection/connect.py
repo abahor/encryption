@@ -3,12 +3,15 @@ from myproject.connection.form import LoginForm
 from flask_login import login_required, login_user, logout_user, current_user
 import requests
 from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 
 connect = Blueprint('connect', __name__, template_folder='temp')
 
 lis = {'id': 0, 'token': 0}
 req = requests.Session()
-
+key = RSA.generate(2048)
+pri = t.exportKey()
+pub = t.publickey().exportKey()
 # -- i will need to define a request.Session for the hole routes
 
 # -- there must be a general request method here to handle all the cookies for each app
@@ -39,20 +42,29 @@ def call():
 @connect.route('/encrypt')
 @login_required
 def encrypt_message():
-    return 's'  # -- return message but encrypted
+    his_public_key = request.args.get('hiskey')
+    message = request.args.get('message')
+    encryption_key = RSA.import_key(his_public_key)
+    enc = PKCS1_OAEP.new(his_public_key)
+
+    return enc.encrypt(message)  # -- return message but encrypted
 
 
 @connect.route('/decrypt')
 @login_required
 def decrypt():
-    return 's'  # -- message but decrypted
+    message = request.args.get('message')
+    decrypt_key = RSA.import_key(pri)
+                                                        # --------------- see if js can hold a key of encryption and decryptio
+    decrypt = PKCS1_OAEP.new(decrypt_key)
+
+    return decrypt.decrypt(message)  # -- message but decrypted
 
 
-@connect.route('/generate_keys')
+@connect.route('/get_public_key')
 @login_required
-def generate_public_key():
-    key = RSA.generate(2048)
-    return 'keys'  # -- it will return the key public for exhage and private for decryption
+def get_public_key():
+    return pub  # -- it will return the key public for exhage and private for decryption
 
 
 @connect.route('/settings')

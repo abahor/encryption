@@ -4,6 +4,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 import requests
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
+import base64
 
 connect = Blueprint('connect', __name__, template_folder='temp')
 
@@ -47,7 +48,7 @@ def encrypt_message():
     encryption_key = RSA.import_key(his_public_key)
     enc = PKCS1_OAEP.new(his_public_key)
 
-    return enc.encrypt(message)  # -- return message but encrypted
+    return base64.b64encode(enc.encrypt(message))  # -- return message but encrypted
 
 
 @connect.route('/decrypt')
@@ -58,13 +59,13 @@ def decrypt():
                                                         # --------------- see if js can hold a key of encryption and decryptio
     decrypt = PKCS1_OAEP.new(decrypt_key)
 
-    return decrypt.decrypt(message)  # -- message but decrypted
+    return decrypt.decrypt(base64.b64decode(message))  # -- message but decrypted
 
 
 @connect.route('/get_public_key')
 @login_required
 def get_public_key():
-    return pub  # -- it will return the key public for exhage and private for decryption
+    return base64.b64encode(pub)  # -- it will return the key public for exhage and private for decryption
 
 
 @connect.route('/settings')

@@ -91,11 +91,11 @@ def login():
     if form.validate_on_submit():
         # req = requests.Session()
         paramed = {'c': form.email.data}
-        username = req.post('https://www.secure.com/username', params=paramed)
+        username = req.post('http://127.0.0.1:5000/username', params=paramed)
         if username.status_code == 200:
             params = {'c': form.password.data}
             # -- username stored in the Session['username']
-            password = req.post('https://www.secure.com/password', params=params)
+            password = req.post('http://127.0.0.1:5000/password', params=params)
             # -- limiter for the password route in the server
             if password.status_code == 200:
                 login_user(current_user)

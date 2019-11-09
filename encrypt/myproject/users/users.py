@@ -4,26 +4,26 @@ from myproject.users.forms import RegisterationForm, LoginForm, yourEmail
 from flask import redirect, render_template, Blueprint, url_for, session, request, flash, abort, jsonify
 from flask_login import login_required, login_user, logout_user, current_user
 import requests
-
+# from myproject.mode import
 users = Blueprint('users', __name__, template_folder='temp')
 
 
 @users.route('/')
 def main():
     # form = LoginForm()
-    if current_user.is_authenticated:
-        redirect('/connect')
+    # if current_user.is_authenticated:
+    #     redirect('/connect')
     # if form.validate_on_submit():
-        # user = Users.query.filter_by(email=form.email.data).first()
-        # req = requests.Session()
-        # data = {'username': form.email.data, 'password': form.password.data}
-        # d = req.post('https://webserver.com/verify', data)  # -- it should be https ---- put the webserver name
-        # if d.status_code == 200:
-            # login_user(current_user, remember=True, duration=datetime.timedelta(hours=2))
-            # login_user(current_user)
-            # lis = list(d.text.split(' '))
-        # else:
-        #     flash('email or password is wrong')
+    #     # user = Users.query.filter_by(email=form.email.data).first()
+    #     req = requests.Session()
+    #     data = {'username': form.email.data, 'password': form.password.data}
+    #     d = req.post('https://webserver.com/verify', data)  # -- it should be https ---- put the webserver name
+    #     if d.status_code == 200:
+    #         login_user(current_user, remember=True, duration=datetime.timedelta(hours=2))
+    #         login_user(current_user)
+    # #         lis = list(d.text.split(' '))
+    #     else:
+    #         flash('email or password is wrong')
 
     # return render_template('main.html', form=form)
     return render_template('main.html')

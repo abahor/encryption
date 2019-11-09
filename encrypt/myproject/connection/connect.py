@@ -6,24 +6,26 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 import base64
 
-connect = Blueprint('connect', __name__, template_folder='temp')
+main = Blueprint('connect', __name__, template_folder='temp')
 
 lis = {'id': 0, 'token': 0}
 req = requests.Session()
 key = RSA.generate(2048)
-pri = t.exportKey()
-pub = t.publickey().exportKey()
+pri = key.exportKey()
+pub = key.publickey().exportKey()
+
+
 # -- i will need to define a request.Session for the hole routes
 
 # -- there must be a general request method here to handle all the cookies for each app
 
-@connect.route('/connect')
+@main.route('/connect')
 @login_required
 def connect():
     return render_template('main.html', token=lis['token'])
 
 
-@connect.route('/got_connected')
+@main.route('/got_connected')
 @login_required
 def got_connected():
     peer_id = request.args.get('peerid')
@@ -31,7 +33,7 @@ def got_connected():
     return render_template('chat_tab.html', peer_id=peer_id, token=token)
 
 
-@connect.route('/call')
+@main.route('/call')
 @login_required
 def call():
     # -- open a conversation (chat) between two people
@@ -40,41 +42,41 @@ def call():
 
 # -- future route call () video() voice() media()
 
-@connect.route('/encrypt')
+@main.route('/encrypt')
 @login_required
 def encrypt_message():
     his_public_key = request.args.get('hiskey')
     message = request.args.get('message')
     encryption_key = RSA.import_key(his_public_key)
-    enc = PKCS1_OAEP.new(his_public_key)
+    enc = PKCS1_OAEP.new(encryption_key)
 
     return base64.b64encode(enc.encrypt(message))  # -- return message but encrypted
 
 
-@connect.route('/decrypt')
+@main.route('/decrypt')
 @login_required
 def decrypt():
     message = request.args.get('message')
     decrypt_key = RSA.import_key(pri)
-                                                        # --------------- see if js can hold a key of encryption and decryptio
+    # --------------- see if js can hold a key of encryption and decryptio
     decrypt = PKCS1_OAEP.new(decrypt_key)
 
     return decrypt.decrypt(base64.b64decode(message))  # -- message but decrypted
 
 
-@connect.route('/get_public_key')
+@main.route('/get_public_key')
 @login_required
 def get_public_key():
     return base64.b64encode(pub)  # -- it will return the key public for exhage and private for decryption
 
 
-@connect.route('/settings')
+@main.route('/settings')
 @login_required
 def settings():
     return render_template('settings.html')
 
 
-@connect.route('/logout')
+@main.route('/logout')
 @login_required
 def logout():
     logout_user()
@@ -85,7 +87,7 @@ def logout():
 # IDEA: make an mysqlite local to store it
 # -- local setting will help identofy the user don't add it
 
-@connect.route('/login')
+@main.route('/login')
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -107,7 +109,7 @@ def login():
     return render_template('login.html', form=form)
 
 
-@connect.route('/logout')
+@main.route('/logout')
 @login_required
 def logout():
     logout_user()

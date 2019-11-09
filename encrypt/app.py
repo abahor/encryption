@@ -1,6 +1,6 @@
 from myproject import app
-from pyfladesk import init_gui
+import pyfladesk
 
 
 if __name__ == '__main__':
-    init_gui(app)
+    pyfladesk.init_gui(app)

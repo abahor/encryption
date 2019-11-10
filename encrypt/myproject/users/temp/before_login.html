@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+    <link rel="icon" href="/static/speech-bubble.png" type="image/x-icon">
+
+    <title>{% block title %}main{% endblock %}</title>
+  </head>
+  <body>
+  <style>
+    .btn{
+      width : 49%;
+    }
+
+  </style>
+<div class="jumbotron">
+  <div class="">
+  <h3 class="display-4 text-center" style="margin:50px">the most secure app in the world</h3>
+  </div>
+  <a href="/login" ><button class="btn btn-primary btn-lg">login</button></a>
+  <a href="/register"><button class="btn btn-success btn-lg">register</button></a>
+</div>
+  </body>
+</html>

@@ -1,12 +1,14 @@
-from flask import redirect, render_template, Blueprint, url_for, session, request, flash, abort
-from myproject.connection.form import LoginForm
-from flask_login import login_required, login_user, logout_user, current_user
-import requests
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
 import base64
+import os
 
-main = Blueprint('connect', __name__, template_folder='temp')
+import requests
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
+from flask import redirect, render_template, Blueprint, request, flash,send_from_directory
+from flask_login import login_required, login_user, logout_user, current_user
+from myproject.connection.form import LoginForm
+
+main = Blueprint('main', __name__, template_folder='temp')
 
 lis = {'id': 0, 'token': 0}
 req = requests.Session()
@@ -109,8 +111,20 @@ def login():
     return render_template('login.html', form=form)
 
 
-@main.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    redirect('/login')
+# @main.route('/logout')
+# @login_required
+# def logout():
+#     logout_user()
+#     redirect('/login')
+# @main.route('/favicon.ico')
+# def favicon():
+#     print('testing')
+#     return send_from_directory(os.path.join(main.root_path, 'static'),
+#                                'speech-bubble.ico', mimetype='image/vnd.microsoft.icon')
+
+@main.route('/favicon.ico')
+def favicon():
+    return send_from_directory("static",filename='speech-bubble.png'
+                               , mimetype='image/vnd.microsoft.icon')
+
+# <div>Icons made by <a href="https://www.flaticon.com/authors/chanut" title="Chanut">Chanut</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>

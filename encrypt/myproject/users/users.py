@@ -26,12 +26,12 @@ def main():
     #         flash('email or password is wrong')
 
     # return render_template('main.html', form=form)
-    return render_template('main.html')
+    return render_template('before_login.html')
 
 
 @users.route('/register')
 def register():
-    return redirect('http://webserver.com')  # ---- OPEN A URL IN THE BROWSER TO THE SERVER TO REGISTER
+    return redirect('http://127.0.0.1:5000')  # ---- OPEN A URL IN THE BROWSER TO THE SERVER TO REGISTER
 
 #  --- -----      probably remove this function from here and add it to connection
 # @users.route('/login')

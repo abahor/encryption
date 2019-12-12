@@ -1,6 +1,6 @@
 import os
 
-from flask import send_from_directory, send_file
+# from flask import send_from_directory, send_file
 from myproject import app
 import pyfladesk
 
@@ -11,4 +11,5 @@ import pyfladesk
 
 
 if __name__ == '__main__':
-    pyfladesk.init_gui(app,window_title='Chat app', icon=os.getcwd() + "/myproject/static/speech-bubble.png")
+    # pyfladesk.init_gui(app, window_title='Chat app', icon=os.getcwd() + "/myproject/static/speech-bubble.png")
+    app.run(debug=True, port=5050)

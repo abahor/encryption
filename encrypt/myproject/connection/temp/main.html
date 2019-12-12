@@ -7,9 +7,9 @@
     {% block links %}
     <link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
     <script src="static/js/socket.io.js"></script>
-    <script src="static/js/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="static/js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="static/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="static/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="static/js/popper.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
     {% endblock %}
 
   </head>
@@ -25,9 +25,10 @@
       }
     </style>
     <!-- IDEA: turning XMl for untitled.ui to html ASK 3b3azeem -->
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" hidden>
 This is id doesn't exist or not live right now
 </div>
+  <div class="container">
     <div class="jumbotron">
 
       <h5>Enter ID:</h5>
@@ -36,6 +37,7 @@ This is id doesn't exist or not live right now
       <h5>Get my ID:</h5>
       <input id="mycontactid" type="text" name="" value="" class="form-control" aria-label="try to see if this user is available" readonly>
       <button id="getmyid" type="button" class="btn btn-primary" name="button" aria-label="try to see if this user is availaibe">get my Id</button>
+    </div>
     </div>
     <input value="{{ token }}" id="token" hidden>
 

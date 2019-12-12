@@ -1,11 +1,13 @@
 import base64
 import os
+from functools import wraps
 
 import requests
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
-from flask import redirect, render_template, Blueprint, request, flash,send_from_directory
-from flask_login import login_required, login_user, logout_user, current_user
+from flask import redirect, render_template, Blueprint, request, flash, send_from_directory, Markup, url_for, session, \
+    abort
+from flask_login import login_user, logout_user, current_user
 from myproject.connection.form import LoginForm
 
 main = Blueprint('main', __name__, template_folder='temp')
@@ -17,18 +19,31 @@ pri = key.exportKey()
 pub = key.publickey().exportKey()
 
 
+# --- useful functions
+def check_logged(f):
+    @wraps(f)
+    def wra(*args, **kwargs):
+        user = req.post('http://127.0.0.1:5000/if_logged_in')
+        if user.status_code == 200:
+            return f(*args, **kwargs)
+        else:
+            return abort(404)
+
+    return wra
+
+
 # -- i will need to define a request.Session for the hole routes
 
 # -- there must be a general request method here to handle all the cookies for each app
 
 @main.route('/connect')
-@login_required
+@check_logged
 def connect():
     return render_template('main.html', token=lis['token'])
 
 
 @main.route('/got_connected')
-@login_required
+@check_logged
 def got_connected():
     peer_id = request.args.get('peerid')
     token = request.args.get('token')
@@ -36,7 +51,7 @@ def got_connected():
 
 
 @main.route('/call')
-@login_required
+@check_logged
 def call():
     # -- open a conversation (chat) between two people
     return render_template('call.html')
@@ -45,7 +60,7 @@ def call():
 # -- future route call () video() voice() media()
 
 @main.route('/encrypt')
-@login_required
+@check_logged
 def encrypt_message():
     his_public_key = request.args.get('hiskey')
     message = request.args.get('message')
@@ -56,7 +71,7 @@ def encrypt_message():
 
 
 @main.route('/decrypt')
-@login_required
+@check_logged
 def decrypt():
     message = request.args.get('message')
     decrypt_key = RSA.import_key(pri)
@@ -67,21 +82,23 @@ def decrypt():
 
 
 @main.route('/get_public_key')
-@login_required
+@check_logged
 def get_public_key():
     return base64.b64encode(pub)  # -- it will return the key public for exhage and private for decryption
 
 
 @main.route('/settings')
-@login_required
+@check_logged
 def settings():
     return render_template('settings.html')
 
 
 @main.route('/logout')
-@login_required
+@check_logged
 def logout():
     logout_user()
+    req.request('GET', 'https://127.0.0.1:5000/logout')
+    req.cookies.clear()
     return redirect('/login')
 
 
@@ -89,11 +106,12 @@ def logout():
 # IDEA: make an mysqlite local to store it
 # -- local setting will help identofy the user don't add it
 
-@main.route('/login')
+@main.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
         # req = requests.Session()
+        # print(form.email.data)
         paramed = {'c': form.email.data}
         username = req.post('http://127.0.0.1:5000/username', params=paramed)
         if username.status_code == 200:
@@ -101,18 +119,24 @@ def login():
             # -- username stored in the Session['username']
             password = req.post('http://127.0.0.1:5000/password', params=params)
             # -- limiter for the password route in the server
+            # print('password')
             if password.status_code == 200:
-                login_user(current_user)
-                lis['id'] = password.text.split('0')
-                lis['token'] = password.text.split('1')
-                redirect('/connect')
+                # login_user(current_user, remember=True)
+                print(password)
+
+                p = password
+                o = p.json()
+                lis['id'] = o['id']
+                lis['token'] = o['token']
+                return redirect(url_for('main.connect'))
         else:
-            flash("email or password isn't correct")
+            flash(Markup(f"email or password isn't correct <a href='http://127.0.0.1:5000/forget-password'>forget "
+                         f"password</a>"))
     return render_template('login.html', form=form)
 
 
 # @main.route('/logout')
-# @login_required
+# @check_logged
 # def logout():
 #     logout_user()
 #     redirect('/login')
@@ -124,7 +148,18 @@ def login():
 
 @main.route('/favicon.ico')
 def favicon():
-    return send_from_directory("static",filename='speech-bubble.png'
+    return send_from_directory("static", filename='speech-bubble.png'
                                , mimetype='image/vnd.microsoft.icon')
 
-# <div>Icons made by <a href="https://www.flaticon.com/authors/chanut" title="Chanut">Chanut</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+# @main.route('/send_cookies', methods=['POST','GET'])
+# def send_cookies():
+#     return req.cookies
+
+
+# <div>Icons made by <a href="https://www.flaticon.com/authors/chanut" title="Chanut">Chanut</a> from <a
+# href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+# @main.route('/send_cookies')
+# def send_cookies():
+#     return str(req.cookies)

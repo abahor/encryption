@@ -1,7 +1,7 @@
 import datetime
 
 from myproject.users.forms import RegisterationForm, LoginForm, yourEmail
-from flask import redirect, render_template, Blueprint, url_for, session, request, flash, abort, jsonify
+from flask import redirect, render_template, Blueprint, url_for, session, request, flash, abort, jsonify, Response
 from flask_login import login_required, login_user, logout_user, current_user
 import requests
 # from myproject.mode import

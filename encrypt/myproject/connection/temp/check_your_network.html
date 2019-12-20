@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% block content %}
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            check your internet connection and try again <br>
+            {{ e }}
+            <button class="btn btn-primary" onclick="reload()">reload</button>
+        </div>
+    </div>
+</div>
+<script>
+    function reload(){
+        window.location.reload()
+    }
+</script>
+</body>
+{% endblock %}

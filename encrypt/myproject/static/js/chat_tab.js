@@ -5,6 +5,7 @@ var container = document.querySelector('.msg_container_base')
 var my_key = my_key()
 var his_id = his_id()
 var his_public_key
+var token = document.getElementById('token').value
 // var button = document.getElementById('btn-chat')
 
 // i need way to make multi key available
@@ -12,7 +13,9 @@ listening.on('connect',function () {
   listening.emit('my_key', {'key': my_key, 'hisid': his_id, 'token':token })
 })
 listening.on('exchange', function (msg) {
-  his_public_key = msg;
+  his_public_key = msg['key'];
+//  his_public_key = msg;
+
 })
 // NOTE: if it doesn't work change it to io.connect('')
 // make the first exchange on the number of keys the exchange the keys

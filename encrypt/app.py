@@ -2,7 +2,7 @@ import os
 
 # from flask import send_from_directory, send_file
 from myproject import app
-import pyfladesk
+# import pyfladesk
 
 # @app.route('/favicon.ico')
 # def favicon():

@@ -13,6 +13,8 @@ req = requests.Session()
 key = RSA.generate(2048)
 pri = t.exportKey()
 pub = t.publickey().exportKey()
+
+
 # -- i will need to define a request.Session for the hole routes
 
 # -- there must be a general request method here to handle all the cookies for each app
@@ -56,7 +58,7 @@ def encrypt_message():
 def decrypt():
     message = request.args.get('message')
     decrypt_key = RSA.import_key(pri)
-                                                        # --------------- see if js can hold a key of encryption and decryptio
+    # --------------- see if js can hold a key of encryption and decryptio
     decrypt = PKCS1_OAEP.new(decrypt_key)
 
     return decrypt.decrypt(base64.b64decode(message))  # -- message but decrypted

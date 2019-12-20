@@ -23,11 +23,14 @@ pub = key.publickey().exportKey()
 def check_logged(f):
     @wraps(f)
     def wra(*args, **kwargs):
-        user = req.post('http://127.0.0.1:5000/if_logged_in')
+        try:
+            user = req.post('http://127.0.0.1:5000/if_logged_in')
+        except Exception as e:
+            return render_template('check_your_network.html', e=e)
         if user.status_code == 200:
             return f(*args, **kwargs)
         else:
-            return abort(404)
+            return redirect('/logout')
 
     return wra
 
@@ -97,14 +100,14 @@ def settings():
 @check_logged
 def logout():
     logout_user()
-    req.request('GET', 'https://127.0.0.1:5000/logout')
+    req.request('GET', 'https://127.0.0.1:5000/logout?id=' + str(lis['id']))
     req.cookies.clear()
     return redirect('/login')
 
 
 # -- how i am going to store user settings
 # IDEA: make an mysqlite local to store it
-# -- local setting will help identofy the user don't add it
+# -- local setting will help identify the user don't add it
 
 @main.route('/login', methods=['POST', 'GET'])
 def login():
@@ -129,9 +132,13 @@ def login():
                 lis['id'] = o['id']
                 lis['token'] = o['token']
                 return redirect(url_for('main.connect'))
+            else:
+                flash(Markup('''<div class="alert alert-danger alert-dismissible fade show" role="alert">Email or Password is wrong 
+                </div>'''))
         else:
-            flash(Markup(f"email or password isn't correct <a href='http://127.0.0.1:5000/forget-password'>forget "
-                         f"password</a>"))
+            flash(Markup('''<div class="alert alert-danger alert-dismissible fade show" role="alert">Email or 
+            Password is wrong click here if you forgot your password <a style='' href='http://127.0.0.1:5000/forget-password'>forget password</a></div>'''))  # <a
+
     return render_template('login.html', form=form)
 
 
@@ -150,7 +157,6 @@ def login():
 def favicon():
     return send_from_directory("static", filename='speech-bubble.png'
                                , mimetype='image/vnd.microsoft.icon')
-
 
 # @main.route('/send_cookies', methods=['POST','GET'])
 # def send_cookies():

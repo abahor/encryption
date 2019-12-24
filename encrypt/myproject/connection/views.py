@@ -12,6 +12,7 @@ from myproject.connection.form import LoginForm
 
 main = Blueprint('main', __name__, template_folder='temp')
 
+# global lis
 lis = {'id': 0, 'token': 0}
 req = requests.Session()
 key = RSA.generate(2048)
@@ -34,6 +35,16 @@ def check_logged(f):
 
     return wra
 
+
+def login_check():
+    try:
+        user = req.post('http://127.0.0.1:5000/if_logged_in')
+    except Exception as e:
+        return render_template('check_your_network.html', e=e)
+    if user.status_code == 200:
+        return True
+    else:
+        return False
 
 # -- i will need to define a request.Session for the hole routes
 
@@ -99,7 +110,7 @@ def settings():
 @main.route('/logout')
 @check_logged
 def logout():
-    logout_user()
+    # logout_user()
     req.request('GET', 'https://127.0.0.1:5000/logout?id=' + str(lis['id']))
     req.cookies.clear()
     return redirect('/login')
@@ -111,8 +122,12 @@ def logout():
 
 @main.route('/login', methods=['POST', 'GET'])
 def login():
+    if login_check():
+        return redirect('main.connect')
     form = LoginForm()
     if form.validate_on_submit():
+        req.cookies.clear()
+        req.close()
         # req = requests.Session()
         # print(form.email.data)
         paramed = {'c': form.email.data}
@@ -126,15 +141,18 @@ def login():
             if password.status_code == 200:
                 # login_user(current_user, remember=True)
                 print(password)
-
+                # if password.text == 'already_logged_in':
+                #     return redirect('/connect')
                 p = password
                 o = p.json()
+                print(o['id'])
                 lis['id'] = o['id']
+                print(lis['id'])
                 lis['token'] = o['token']
                 return redirect(url_for('main.connect'))
             else:
-                flash(Markup('''<div class="alert alert-danger alert-dismissible fade show" role="alert">Email or Password is wrong 
-                </div>'''))
+                flash(Markup('''<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Email or Password is wrong </div>'''))
         else:
             flash(Markup('''<div class="alert alert-danger alert-dismissible fade show" role="alert">Email or 
             Password is wrong click here if you forgot your password <a style='' href='http://127.0.0.1:5000/forget-password'>forget password</a></div>'''))  # <a

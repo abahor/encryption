@@ -7,7 +7,7 @@ myid.addEventListener('click',myidclicked())
 
 
 function myidclicked() {
-    var d = new XMLHttpRequest()
+    var d = new XMLHttpRequest();
 //    var myid = document.getElementById('getmyid')
 //    d.open('POST','http://127.0.0.1:5000/myid?token='+token)
 
@@ -84,7 +84,7 @@ $(document).ready(function(){
   socket.on('receive',function (msg) {
     var id = msg['hisid']
     // id = msg['hisid']  uncomment this if it's not working    ←          ←←←←←
-    $('#connection_id').html('this id: '+ id  ' is trying to contact with you' )
+    $('#connection_id').html('this id: '+ id +  ' is trying to contact with you' );
     $('.modal').modal('show');
 
 //     CHECK FOR THE CONNECTION IF ACCEPTED OR NOT

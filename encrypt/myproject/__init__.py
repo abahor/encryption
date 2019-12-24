@@ -7,9 +7,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mykeyasdfghjklsdfghnjm'
 # app.debug = True
 
-login = LoginManager()
-login.init_app(app)
-login.login_view = "main.login"
+# login = LoginManager()
+# login.init_app(app)
+# login.login_view = "main.login"
 
 
 
